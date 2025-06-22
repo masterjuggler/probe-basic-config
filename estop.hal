@@ -1,0 +1,15 @@
+# estop
+loadrt estop_latch
+addf estop-latch.0 servo-thread
+
+net estop-loopout iocontrol.0.emc-enable-in <= estop-latch.0.ok-out
+net estop-loopin iocontrol.0.user-enable-out => estop-latch.0.ok-in
+net estop-reset iocontrol.0.user-request-enable => estop-latch.0.reset
+
+net contactor-estop  <= hm2_7i96s.0.inm.00.input-06-not
+net mpg-estop          	<= hm2_7i96s.0.gpio.045.in
+
+net contactor-estop => or2.1.in0
+net mpg-estop => or2.1.in1
+net remote-estop => or2.1.out
+net remote-estop <= estop-latch.0.fault-in

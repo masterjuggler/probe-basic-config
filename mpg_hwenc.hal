@@ -1,0 +1,58 @@
+loadrt mux4 count=1
+addf mux4.0 servo-thread
+
+loadrt ilowpass
+addf ilowpass.0 servo-thread
+
+setp ilowpass.0.scale 1000
+setp ilowpass.0.gain 0.1
+
+
+# For position mode (the default), set to 0
+# In position mode the axis will move exactly jog-scale
+# units for each count, regardless of how long that might take,
+setp axis.x.jog-vel-mode 1
+setp axis.y.jog-vel-mode 1
+setp axis.z.jog-vel-mode 1
+
+
+# This sets the increments that will be used based on the input to the mux4
+setp mux4.0.in0 0.0001
+setp mux4.0.in1 0.00001
+setp mux4.0.in2 0.000001
+
+
+# The inputs to the mux4 component, default is not required so Input 24 isn’t referenced
+net scale1 mux4.0.sel0 <= hm2_7i96s.0.gpio.043.in_not
+net scale2 mux4.0.sel1 <= hm2_7i96s.0.gpio.042.in_not
+
+
+# The output from the mux4 is sent to each axis jog scale
+net mpg-scale <= mux4.0.out
+net mpg-scale => axis.x.jog-scale
+net mpg-scale => axis.y.jog-scale
+net mpg-scale => axis.z.jog-scale
+
+
+# The Axis select inputs
+net axis-select-x <= hm2_7i96s.0.gpio.034.in_not
+net axis-select-y <= hm2_7i96s.0.gpio.036.in_not
+net axis-select-z <= hm2_7i96s.0.gpio.038.in_not
+
+
+# MAPPING MPG ENCODER signals to jog counters
+net mpg-out ilowpass.0.in <= hm2_7i96s.0.inm.01.enc2-count
+# net encoder-counts <= hm2_7i96s.0.inm.01.enc2-count
+
+
+# MAPPING INPUT signals to linux cnc signals / gui
+net encoder-counts  <= ilowpass.0.out
+net encoder-counts => axis.x.jog-counts
+net encoder-counts => axis.y.jog-counts
+net encoder-counts => axis.z.jog-counts
+
+
+# Send input signal to linux cnc action (enable axis selection)
+net axis-select-x => axis.x.jog-enable
+net axis-select-y => axis.y.jog-enable
+net axis-select-z => axis.z.jog-enable

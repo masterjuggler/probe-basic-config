@@ -1,0 +1,69 @@
+# Add component to mux axis selection into the selected axis
+loadrt encoder num_chan=1
+loadrt mux4 count=1
+addf encoder.capture-position servo-thread
+addf encoder.update-counters servo-thread
+addf mux4.0 servo-thread
+
+loadrt ilowpass
+addf ilowpass.0 servo-thread
+
+setp ilowpass.0.scale 1000
+setp ilowpass.0.gain 0.05
+
+# If your MPG outputs a quadrature signal per click set x4 to 1
+# If your MPG puts out 1 pulse per click set x4 to 0
+setp encoder.0.x4-mode 0
+
+# For velocity mode, set to 1
+# In velocity mode the axis stops when the dial is stopped
+# even if that means the commanded motion is not completed,
+# For position mode (the default), set to 0
+# In position mode the axis will move exactly jog-scale
+# units for each count, regardless of how long that might take,
+setp axis.x.jog-vel-mode 1
+setp axis.y.jog-vel-mode 1
+setp axis.z.jog-vel-mode 1
+
+# This sets the scale that will be used based on the input to the mux4
+# The scale used here has to be multiplied by the ilowpass scale
+setp mux4.0.in0 0.0001
+setp mux4.0.in1 0.00001
+setp mux4.0.in2 0.000001
+
+# This sets the scale that will be used based on the input to the mux4
+# setp mux4.0.in0 0.1
+# setp mux4.0.in1 0.01
+# setp mux4.0.in2 0.001
+
+# The inputs to the mux4 component
+net scale1 mux4.0.sel0 <= hm2_7i96s.0.gpio.043.in_not
+net scale2 mux4.0.sel1 <= hm2_7i96s.0.gpio.042.in_not
+# net scale2 mux4.0.sel2 <= hm2_7i96s.0.gpio.044.in_not
+
+# The output from encoder counts is sent to ilowpass
+net mpg-out ilowpass.0.in <= encoder.0.counts
+
+# The output from the mux4 is sent to each axis jog scale
+net mpg-scale <= mux4.0.out
+net mpg-scale => axis.x.jog-scale
+net mpg-scale => axis.y.jog-scale
+net mpg-scale => axis.z.jog-scale
+
+# The MPG inputs
+net mpg-a encoder.0.phase-A <= hm2_7i96s.0.gpio.046.in_not
+net mpg-b encoder.0.phase-B <= hm2_7i96s.0.gpio.047.in_not
+
+# The Axis select inputs
+net mpg-x axis.x.jog-enable <= hm2_7i96s.0.gpio.034.in_not
+net mpg-y axis.y.jog-enable <= hm2_7i96s.0.gpio.036.in_not
+net mpg-z axis.z.jog-enable <= hm2_7i96s.0.gpio.038.in_not
+
+# The encoder output counts to the axis. Only the selected axis will move.
+net encoder-counts  <= ilowpass.0.out
+net encoder-counts => axis.x.jog-counts
+net encoder-counts => axis.y.jog-counts
+net encoder-counts => axis.z.jog-counts
+
+# --- ESTOP-EXT ---
+# net estop-ext     <=  hm2_7i96s.0.gpio.045.in_not

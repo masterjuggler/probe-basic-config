@@ -1,0 +1,27 @@
+T1   P0   D+0.125000 Z+4.183978 ; 1/8 end mill
+T2   P0   D+0.062500 Z+0.100000 ; 1/16 end mill
+T3   P0   D+0.201000 Z+1.210845 ; #7 tap drill
+T4   P0   D+0.236200 Z+1.308645 ; 6mm 3fl end mill
+T8   P0   D+0.236200 Z+1.181945 ; 6mm 45° chamfer
+T10  P0   D+0.125000 Z+1.564045 ; 1/8" drill
+T11  P0   D+1.000000 Z+4.207578 ; 1" 3fl router
+T12  P0   D+0.393700 Z+1.517445 ; 10mm single flute bap
+T13  P0   D+0.296900 Z+8.337460 ; 19/64 drill
+T14  P0   D+0.218800 Z+2.441745 ; 7/32" drill
+T16  P0   D+0.500000 Z+1.852845 ; 1/2" 3fl end mill
+T17  P0   D+0.196600 Z+5.426378 ; 5mm drill
+T18  P0   D+0.187500 Z+1.031045 ; #2 center drill
+T19  P0   D+0.190900 Z+4.181978 ; m6 thread mill
+T20  P0   D+0.500000 Z+4.291478 ; 82 deg countersink
+T21  P0   D+0.234400 Z+5.881478 ; 15/64" drill
+T22  P0   D+0.118100 Z+1.138545 ; 3mm 3fl end mill
+T23  P0   D+0.153500 Z+1.395745 ; m5 thread mill
+T24  P0   D+0.157500 Z+1.582345 ; 4mm straight flute end mill
+T25  P0   D+0.236200 Z+1.139545 ; 6mm 4fl end mill
+T26  P0   D+0.157500 Z+1.669745 ; 4mm compression end mill
+T27  P0   D+0.078700 Z+2.259245 ; 2mm end mill
+T28  P0   D+0.157500 Z+1.313395 ; 4mm r0.5 bull nose end mill
+T29  P0   D+0.129900 Z+1.747245 ; 3.3mm drill
+T98  P0   Z+0.000245 ; spindle nose test
+T99  P0   D+0.078700 Z+2.307495 ; probe
+T30  P0   D+0.236200 Z+1.692595 ; 6mm 1fl end mill
